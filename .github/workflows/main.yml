@@ -1,6 +1,7 @@
 name: Converted in automated tests
 
 on:
+  create:
   push:
     branches: [ "main" ]
   pull_request:
