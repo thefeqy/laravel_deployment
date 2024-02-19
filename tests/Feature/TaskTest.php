@@ -1,0 +1,85 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Enums\UserType;
+use App\Models\Task;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Tests\TestCase;
+
+class TaskTest extends TestCase
+{
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->setBaseRoute('tasks');
+        $this->setBaseModel(Task::class);
+    }
+
+    /**
+     * @test
+     */
+    public function test_user_cannot_access_tasks_page(): void
+    {
+        $this->signIn();
+        $response = $this->get('/tasks');
+
+        $response->assertStatus(403);
+    }
+
+    /**
+     * @test
+     */
+    public function test_admin_can_access_tasks_page(): void
+    {
+        $this->signIn(userType: UserType::ADMIN);
+
+        $response = $this->get('/tasks');
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     */
+    public function test_admin_can_create_task(): void
+    {
+        $this->signIn(userType: UserType::ADMIN);
+
+        $this->create();
+    }
+
+    /**
+     * @test
+     */
+    public function test_user_cannot_assign_tasks(): void
+    {
+        $this->signIn(userType: UserType::ADMIN);
+
+        $data = Task::factory()->raw([
+            'assigned_by_id' => User::factory()->create(['user_type' => UserType::USER])
+        ]);
+
+        $response = $this->postJson(route('tasks.store'), $data);
+
+        $response->assertUnprocessable()
+            ->assertInvalid('assigned_by_id');
+    }
+
+    /**
+     * @test
+     */
+    public function test_title_limit_cannot_exceed_30_char(): void
+    {
+        $this->signIn(userType: UserType::ADMIN);
+
+        $data = Task::factory()->raw([
+            'title' => Str::random(40),
+        ]);
+
+        $response = $this->postJson(route('tasks.store'), $data);
+
+        $response->assertUnprocessable()
+            ->assertInvalid('title');
+    }
+}

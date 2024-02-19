@@ -45,4 +45,9 @@ class User extends Authenticatable
         'password' => 'hashed',
         'user_type' => UserType::class,
     ];
+
+    public function scopeUserType($query, string $userType)
+    {
+        return $query->where('user_type', $userType);
+    }
 }

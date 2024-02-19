@@ -159,7 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        App\Providers\CustomDirectivesServiceProvider::class,
         /*
          * Application Service Providers...
          */
