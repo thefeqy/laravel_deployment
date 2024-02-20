@@ -10,6 +10,11 @@ class StatisticController extends Controller
     public function index()
     {
         $stats = Statistic::with('user')->orderBy('tasks_count', 'DESC')->limit(10)->get();
-        return view('statistics.index', compact('stats'));   
+
+        if (request()->ajax()) {
+            return response()->json($stats);
+        }
+
+        return view('statistics.index', compact('stats'));
     }
 }

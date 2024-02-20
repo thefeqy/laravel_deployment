@@ -10,6 +10,6 @@
 
 @Bonus
     (c) One running command to start the application.
-    (c) Confirm the test run in the Github Action after each commit.
-    (c) Update Statistics table using a background job.
+    (c) Confirm the test run in the Github Action after each commit. {cm:2024-02-20}
+    (c) Update Statistics table using a background job. {start:2024-02-20T03:37:13} {cm:2024-02-20} {duration:02h51m}
     (c) Update main README.md
