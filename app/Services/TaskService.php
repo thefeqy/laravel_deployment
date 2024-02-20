@@ -38,9 +38,6 @@ class TaskService
           'description' => $description
         ]);
 
-        $userTasks = Task::where('assigned_to_id', $task->user->id)->count();
-
-        Statistic::updateOrCreate(['user_id' => $task->user->id], ['tasks_count' => $userTasks]);
         flash()->addSuccess("Task created successfully for user: {$task->user->name}");
       });
       return redirect()->route('tasks.index');

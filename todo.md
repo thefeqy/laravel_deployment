@@ -8,8 +8,8 @@
 @Statistics {cm:2024-02-20}
     (A) Create statistics page (3rd page) holds user task count statistics (top 10 users with highest tasks count). {start:2024-02-20T03:06:30} {cm:2024-02-20} {duration:58m}
 
-@Bonus
-    (c) One running command to start the application.
+@Bonus {cm:2024-02-20}
+    (c) One running command to start the application. {cm:2024-02-20}
     (c) Confirm the test run in the Github Action after each commit. {cm:2024-02-20}
     (c) Update Statistics table using a background job. {start:2024-02-20T03:37:13} {cm:2024-02-20} {duration:02h51m}
-    (c) Update main README.md
+    (c) Update main README.md {cm:2024-02-20}
