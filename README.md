@@ -1,4 +1,5 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="/public/assets/logo.png" width="400" alt="Laravel Logo"></a></p>
+
 ## ConvertedIn Fullstack task
 
 I am writing to express my sincere gratitude for the opportunity to complete this technical task you provided. It was truly enriching to delve into the intricacies of the assignment and to apply my skills and knowledge to solve the challenges presented.
@@ -24,11 +25,13 @@ now, you can initialize the application with one single custom command:
 ```
 this command will ask you to specify some environment information and you will be good to go.
 
-To compile javascript assets, you can run this command:
+You can create database using artisan command as follow: `1st requirement`
 
-```javascript
-  npm run dev
 ```
+  php artisan db:create
+```
+> [!WARNING]  
+> Note: you need to have a correct databse conncetion to perform the previous command
 
 ### Migrations
 
@@ -39,10 +42,17 @@ After setting up your database credentials, you can run this command which will 
 ```
 
 ### Run Application
-You need to run the application with the typical command:
+You need to run the application with the typical command: 
 ```php
   php artisan serve
 ```
+
+To compile javascript assets, you can run this command:
+
+```javascript
+  npm run dev
+```
+
 
 ### Queues
 
@@ -53,7 +63,9 @@ You can enable real-time functionality which is used in the statistics table by 
 ```
 
 Now, you can visit `http://localhost:8000` to review the task.
-> note: The first admin credential is: [email: admin@admin.dev, password: 123456789]
+
+> [!NOTE]  
+> Note: The first admin credential is: [email: admin@admin.dev, password: 123456789]
 
 ## Test
 
@@ -65,6 +77,7 @@ OR
   vendor/bin/phpunit
 ```
 
+> [!NOTE]  
 > Note: you can find the logs for the time spent on almost every task in the `todo.md` file.
 
 Best regards,

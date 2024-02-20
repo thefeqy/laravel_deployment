@@ -38,10 +38,6 @@ class ProjectInit extends Command
             required: 'Database name is required.'
         );
 
-        $this->call("db:create $database");
-
-        $this->info("Database: $database has beed created");
-
         $dbUsername = text(
             label: 'What is your database username ?',
             required: 'Database username is required.'
