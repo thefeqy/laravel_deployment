@@ -82,4 +82,24 @@ class TaskTest extends TestCase
         $response->assertUnprocessable()
             ->assertInvalid('title');
     }
+
+    /**
+     * @test
+     */
+    public function test_tasks_page_returns_tasks_in_pagination_form(): void
+    {
+        $this->signIn(userType: UserType::ADMIN);
+
+        Task::factory(50)->create();
+
+        $seenTask = Task::find(5);
+        $unSeenTask = Task::find(15);
+
+        $response = $this->get('/tasks');
+
+        $response->assertOk();
+
+        $response->assertSee($seenTask->title);
+        $response->assertDontSee($unSeenTask->title);
+    }
 }
