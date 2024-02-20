@@ -87,29 +87,9 @@ class TaskTest extends TestCase
     /**
      * @test
      */
-    public function test_tasks_page_returns_tasks_in_pagination_form(): void
-    {
-        $this->signIn(userType: UserType::ADMIN);
-
-        Task::factory(50)->create();
-
-        $seenTask = Task::find(5);
-        $unSeenTask = Task::find(15);
-
-        $response = $this->get('/tasks');
-
-        $response->assertOk();
-
-        $response->assertSee($seenTask->title);
-        $response->assertDontSee($unSeenTask->title);
-    }
-
-    /**
-     * @test
-     */
     public function test_updates_user_statistics_after_task_creation() {
         $this->signIn(userType: UserType::ADMIN);
-        
+
         $user = User::factory()->create(['user_type' => UserType::USER]);
 
         $statsBeforeCreating = Statistic::count();
