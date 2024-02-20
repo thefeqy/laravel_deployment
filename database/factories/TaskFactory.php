@@ -23,6 +23,8 @@ class TaskFactory extends Factory
             'description' => $this->faker->paragraph(),
             'assigned_by_id' => User::factory()->create(['user_type' => UserType::ADMIN]),
             'assigned_to_id' => User::factory()->create(['user_type' => UserType::USER])
+            // 'assigned_by_id' => User::userType(UserType::ADMIN->toString())->get()->random()->id,
+            // 'assigned_to_id' => User::userType(UserType::USER->toString())->get()->random()->id,
         ];
     }
 }

@@ -17,8 +17,8 @@ class InitialUserSeeder extends Seeder
     {
         $this->deleteAllUsers();
 
-        $this->createUsers(count: 10, userType: UserType::ADMIN);
-        $this->createUsers(count: 20, userType: UserType::USER);
+        $this->createUsers(count: 100, userType: UserType::ADMIN);
+        $this->createUsers(count: 10000, userType: UserType::USER);
     }
     
     private function deleteAllUsers(): void 

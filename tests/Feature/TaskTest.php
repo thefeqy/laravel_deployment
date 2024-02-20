@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\UserType;
+use App\Models\Statistic;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -101,5 +102,22 @@ class TaskTest extends TestCase
 
         $response->assertSee($seenTask->title);
         $response->assertDontSee($unSeenTask->title);
+    }
+
+    /**
+     * @test
+     */
+    public function test_updates_user_statistics_after_task_creation() {
+        $this->signIn(userType: UserType::ADMIN);
+        
+        $user = User::factory()->create(['user_type' => UserType::USER]);
+
+        $statsBeforeCreating = Statistic::count();
+        
+        Task::factory()->create(['assigned_to_id' => $user->id]);        
+        
+        $statsAfterCreating = Statistic::where('user_id', $user->id)->count();
+
+        $this->assertGreaterThan($statsBeforeCreating, $statsAfterCreating);
     }
 }

@@ -16,7 +16,7 @@ class TaskService
    */
   public function get()
   {
-    return Task::with('admin', 'user')->paginate(10);
+    return Task::with('admin', 'user')->orderBy('created_at', 'DESC')->paginate(10);
   }
   /**
    * Create task module with dedicated statistics
@@ -38,16 +38,15 @@ class TaskService
           'description' => $description
         ]);
 
-        $userTasks = Task::where('assigned_to_id', $userID)->count();
+        $userTasks = Task::where('assigned_to_id', $task->user->id)->count();
 
-        // Update users tasks
-        Statistic::updateOrCreate(['user_id' => $userID], ['tasks_count' => $userTasks]);
-        DB::commit();
+        Statistic::updateOrCreate(['user_id' => $task->user->id], ['tasks_count' => $userTasks]);
         flash()->addSuccess("Task created successfully for user: {$task->user->name}");
       });
       return redirect()->route('tasks.index');
     } catch (\Exception $e) {
-      return redirect()->back()->withInput();
+      flash()->addError("Error: " . $e->getMessage());
+      return back()->withInput();
     }
   }
 
@@ -60,7 +59,7 @@ class TaskService
    */
   public function getUsersData(string $term, string $userType, int | null $page)
   {
-    $users = User::select('name', 'id')->userType($userType)->where('name', 'LIKE', "%$term%")->paginate(5, ['*'], 'page', $page);
+    $users = User::select('name', 'id')->userType($userType)->where('name', 'LIKE', "%$term%")->paginate(10, ['*'], 'page', $page);
 
     return response()->json($users);
   }

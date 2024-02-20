@@ -46,6 +46,10 @@ class User extends Authenticatable
         'user_type' => UserType::class,
     ];
 
+    public function stat() {
+        return $this->hasOne(Statistic::class);
+    }
+
     public function scopeUserType($query, string $userType)
     {
         return $query->where('user_type', $userType);
