@@ -22,7 +22,7 @@
                 <div class="p-6 text-gray-900">
                     {!! Form::open(['route' => 'tasks.store', 'method' => 'POST', 'class' => 'max-w-sm mx-auto']) !!}
                     <div class="mb-5">
-                        {!! Form::label('admin', __('Assigned by Admin'), [
+                        {!! Form::label('admin', __('Admin Name'), [
                             'class' => 'block mb-2 text-sm font-medium text-gray-900 dark:text-white',
                         ]) !!}
 
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="mb-5">
-                        {!! Form::label('user', __('Assigned to User'), [
+                        {!! Form::label('user', __('Assigned User'), [
                             'class' => 'block mb-2 text-sm font-medium text-gray-900 dark:text-white',
                         ]) !!}
 

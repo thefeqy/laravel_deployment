@@ -23,6 +23,7 @@
                         success: function(data) {
                             var tableBody = $('#stats-table tbody');
                             tableBody.empty();
+                            $('#no-stats').remove();
                             $.each(data, function(id, stat) {
                                 var tableRow =
                                     '<tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">' +
@@ -82,7 +83,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <p class="text-4xl">{{ __('No statistics found') }}</p>
+                                    <p class="text-4xl" id="no-stats">{{ __('No statistics found') }}</p>
                                 @endforelse
                             </tbody>
                         </table>

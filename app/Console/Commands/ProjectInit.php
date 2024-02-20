@@ -34,9 +34,13 @@ class ProjectInit extends Command
         );
 
         $database = text(
-            label: 'What is your database name ?',
+            label: 'Choose database name to create ?',
             required: 'Database name is required.'
         );
+
+        $this->call("db:create $database");
+
+        $this->info("Database: $database has beed created");
 
         $dbUsername = text(
             label: 'What is your database username ?',
@@ -71,18 +75,12 @@ class ProjectInit extends Command
         );
 
         $this->createEnvIfNotExists(
-            '.env.testing',
-            $this->environmentText($dbDriver, $database, $dbUsername, $dbPassword, $pusherId, $pusherKey, $pusherSecret, $pusherCluster)
+            file: '.env',
+            content: $this->environmentText($dbDriver, $database, $dbUsername, $dbPassword, $pusherId, $pusherKey, $pusherSecret, $pusherCluster)
         );
 
         $this->info('Generating application key ...');
         $this->call('key:generate');
-        $this->info('Migration Database ...');
-        $this->call('migrate');
-        $this->call('db:seed');
-        
-        $this->info('Serving Application ...');
-        $this->call('serve');
         
         $this->info('Kindly run "npm run install && npm run dev"');
         $this->info('to enable realtime functionality for statistics page, please run the following command: php artsan queue:work');
