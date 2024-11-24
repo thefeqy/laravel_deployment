@@ -5,16 +5,15 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  # Job 1: Add GitHub Actions IP to Security Group
+  add-ip:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Get GitHub Action's IP
       - name: Get GitHub Action IP
         id: ip
         uses: haythem/public-ip@v1.2
 
-      # Step 2: Add GitHub Actions IP to Security Group
-      - name: Add GitHub Actions IP to Security group
+      - name: Add GitHub Actions IP to Security Group
         run: |
           aws ec2 authorize-security-group-ingress --group-name ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
         env:
@@ -22,7 +21,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
-      # Step 3: Deploy to the Laravel + Vite Application Server
+  # Job 2: Deploy Laravel + Vite App
+  deploy:
+    runs-on: ubuntu-latest
+    needs: add-ip # This job runs only after 'add-ip' is completed
+    steps:
       - name: Deploy to Prod Server
         uses: appleboy/ssh-action@master
         with:
@@ -30,38 +33,30 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            # Navigate to the project directory
             cd /var/www/laravel_deployment
-
-            # Ensure the latest code is pulled
             git stash
             git pull origin main
-
-            # Install PHP dependencies
             composer install --no-dev --optimize-autoloader
-
-            # Run database migrations
             php artisan migrate --force
-
-            # Install and build frontend assets with Vite
             npm install
             npm run build
-
-            # Clear and cache Laravel configuration
             php artisan config:clear
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-
-            # Ensure correct permissions for storage and cache
             chown -R www-data:www-data storage bootstrap/cache
             chmod -R 775 storage bootstrap/cache
-
-            # Restart PHP-FPM
             sudo systemctl restart php8.1-fpm
-            sudo systemctl restart nginx
 
-      # Step 4: Remove GitHub Actions IP from Security Group
+  # Job 3: Remove GitHub Actions IP from Security Group
+  remove-ip:
+    runs-on: ubuntu-latest
+    needs: deploy # This job runs only after 'deploy' is completed
+    steps:
+      - name: Get GitHub Action IP
+        id: ip
+        uses: haythem/public-ip@v1.2
+
       - name: Remove GitHub Actions IP from Security Group
         run: |
           aws ec2 revoke-security-group-ingress --group-name ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
